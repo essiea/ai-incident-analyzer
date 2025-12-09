@@ -9,9 +9,9 @@
 
 
 
-The AI Incident Analyzer is a serverless platform that consumes CloudWatch logs, decodes and processes them, and uses Amazon Bedrock (Claude 3 Sonnet) to automatically generate:
+The AI Incident Analyzer is a serverless platform that consumes CloudWatch logs, decodes them, and uses Amazon Bedrock (Claude 3 Sonnet) to automatically produce:
 
-📌 Human-readable incident summaries
+📌 Human-readable summaries
 
 ⚠️ Root cause analysis
 
@@ -21,28 +21,32 @@ The AI Incident Analyzer is a serverless platform that consumes CloudWatch logs,
 
 🔔 Optional SNS / Slack notifications
 
-This brings AI-driven observability into DevOps/SRE workflows to reduce triage time and accelerate incident resolution.
+This project brings AI-driven observability to DevOps/SRE workflows, reducing triage time and improving incident response.
 
 🚀 Features
 
-Real-time ingestion from CloudWatch Log Groups
+Real-time CloudWatch → Lambda ingestion
 
-Automated decoding & transformation of AWS Logs
+Automatic decoding & parsing of AWS log payloads
 
-Bedrock LLM–powered analysis and recommendations
+Bedrock-powered natural language reasoning
 
-Pluggable notifications (SNS / Slack)
+Suggested fixes and severity scoring
 
-Fully serverless, low-cost, scalable architecture
+SNS notification integration
 
-100% IaC via Terraform
+Fully serverless architecture
+
+Deployable entirely via Terraform
 
 🧠 Architecture
-Architecture Image
+📸 Architecture Image
 
-(Ensure docs/png/architecture.png exists from your GitHub Action auto-generator.)
+(Generated automatically if you set up the diagram workflow.)
 
-Mermaid Diagram
+docs/png/architecture.png
+
+🧩 Mermaid Diagram
 flowchart TD
     CW[CloudWatch Logs] --> SF[Subscription Filter]
     SF --> L[Incident Analyzer Lambda]
@@ -50,7 +54,7 @@ flowchart TD
     B --> L
     L --> SNS[(SNS Topic / Slack Webhook)]
 
-ASCII View
+🔎 ASCII View
 CloudWatch Logs → Subscription Filter → Lambda → Bedrock AI → SNS/Slack
 
 📁 Repository Structure
@@ -79,9 +83,9 @@ SNS
 
 bedrock:InvokeModel
 
-Terraform ≥ 1.6
-
 Python 3.11
+
+Terraform 1.6+
 
 🛠 Deployment (Terraform)
 cd terraform
@@ -96,13 +100,13 @@ Lambda Analyzer
 
 CloudWatch log subscription filter
 
-SNS topic (optional)
+Optional SNS topic
 
-IAM roles
+IAM execution role(s)
 
 🔥 Testing the Analyzer (Lambda Console)
 
-Use the AWS Lambda Test UI with a sample event:
+Use this sample event in the AWS Lambda Test UI:
 
 {
   "awslogs": {
@@ -116,24 +120,24 @@ Use the AWS Lambda Test UI with a sample event:
 }
 
 💰 Cost Overview
-AWS Service	Cost
+AWS Service	Cost Estimate
 Lambda	pennies per month
 SNS	generally free
-Bedrock	free tier + pay-per-use
-CloudWatch Logs	standard log ingestion pricing
+Bedrock	free tier + minimal usage
+CloudWatch Logs	standard ingestion pricing
 
-This architecture is optimized to stay within AWS Free Tier for light workloads.
+This architecture is optimized to stay within the AWS Free Tier for light workloads.
 
 🐛 Troubleshooting
-Issue	Resolution
-AccessDenied – Bedrock	Add bedrock:InvokeModel to the Lambda execution role.
-Logs not being analyzed	Check CloudWatch → Subscription Filters configuration.
-SNS notifications not sending	Verify the SNS_TOPIC_ARN environment variable.
-Long logs truncated	Modify LOG_MAX_CHARS in config.py.
+Issue	Fix
+AccessDenied – Bedrock	Add bedrock:InvokeModel to Lambda execution IAM role.
+Logs not being analyzed	Verify CloudWatch → Log Subscription Filter is attached.
+SNS notifications not firing	Ensure SNS_TOPIC_ARN is correctly set in environment vars.
+Long logs being truncated	Adjust LOG_MAX_CHARS in src/config.py.
 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
-Feel free to open a PR or submit an issue.
+Open a PR or submit an issue to get involved.
 
 📄 License
 
