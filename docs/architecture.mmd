@@ -1,0 +1,7 @@
+flowchart TD
+    CW[CloudWatch Logs] --> SF[Subscription Filter]
+    SF --> L[Lambda Analyzer]
+    L --> B[Amazon Bedrock (Claude 3 Sonnet)]
+    B --> L
+    L --> SNS[(SNS Topic / Slack Webhook)]
+
