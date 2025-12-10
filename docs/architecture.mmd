@@ -1,7 +1,12 @@
 flowchart TD
-    CW[CloudWatch Logs] --> SF[Subscription Filter]
-    SF --> L[Lambda Analyzer]
-    L --> B[Amazon Bedrock (Claude 3 Sonnet)]
-    B --> L
-    L --> SNS[(SNS Topic / Slack Webhook)]
+    CW["CloudWatch Logs"]
+    SF["Subscription Filter"]
+    L["Lambda Analyzer"]
+    B["Amazon Bedrock - Claude 3 Sonnet"]
+    SNS["SNS Topic / Slack Webhook"]
 
+    CW --> SF
+    SF --> L
+    L --> B
+    B --> L
+    L --> SNS
